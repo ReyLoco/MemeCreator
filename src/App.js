@@ -1,23 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import html2canvas from "html2canvas";
 
 function App() {
+  const [linea1, setLinea1] = useState("");
+  const [linea2, setLinea2] = useState("");
+  const [imagen, setImagen] = useState("");
+
+  const onChangeLinea1 = function (evento) {
+    setLinea1(evento.target.value);
+  };
+  const onChangeLinea2 = function (evento) {
+    setLinea2(evento.target.value);
+  };
+
+  const onChangeImage = function (evento) {
+    setImagen(evento.target.value);
+  };
+
+  // Esta función convierte y descarga el canvas a archivo jpg
+  const onClickExportar = function (evento) {
+    html2canvas(document.querySelector("#meme")).then((canvas) => {
+      var img = canvas.toDataURL("image/jpg");
+      var link = document.createElement("a");
+      link.download = "meme.jpg";
+      link.href = img;
+      link.click();
+    });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* Select picker de memes */}
+      <select onChange={onChangeImage}>
+        <option value="bar">bar</option>
+        <option value="death">death</option>
+        <option value="earth">earth</option>
+        <option value="iris">iris</option>
+        <option value="oso">oso</option>
+        <option value="trip">trip</option>
+        <option value="walk">walk</option>
+      </select>
+      <br />
+
+      <input type="text" placeholder="Linea 1" onChange={onChangeLinea1} />
+      <br />
+      <input type="text" placeholder="Linea 2" onChange={onChangeLinea2} />
+      <br />
+
+      <button onClick={onClickExportar}>Exportar</button>
+      <br />
+
+      <div className="meme" id="meme">
+        <span id="linea1">{linea1}</span>
+        <br />
+        <span id="linea2">{linea2}</span>
+        <br />
+        <img src={"/img/" + imagen + ".jpg"} alt="Imagen" />
+      </div>
     </div>
   );
 }
